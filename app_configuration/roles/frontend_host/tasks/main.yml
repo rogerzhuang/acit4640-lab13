@@ -1,0 +1,66 @@
+---
+- name: Install required packages for caddy
+  ansible.builtin.apt:
+    name: debian-keyring debian-archive-keyring apt-transport-https curl
+    state: present
+    update_cache: true
+  become: true
+
+- name: Add Caddy GPG key
+  ansible.builtin.apt_key:
+    url: "https://dl.cloudsmith.io/public/caddy/stable/gpg.key"
+    state: present
+  become: true
+
+- name: Add Caddy repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+    state: present
+  become: true
+
+- name: Install Caddy
+  ansible.builtin.apt:
+    name: caddy
+    state: present
+    update_cache: true
+  become: true
+
+- name: Create web directory
+  ansible.builtin.file:
+    path: /var/www/html
+    state: directory
+    owner: caddy
+    group: caddy
+    mode: "u=rwx,g=rx,o=rx"
+  become: true
+
+- name: Copy static web files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/var/www/html/{{ item }}"
+    owner: caddy
+    group: caddy
+    mode: "u=rw,g=w,o=r"
+  loop:
+    - index.html
+    - client.js
+  become: true
+
+- name: Configure client config.js
+  ansible.builtin.template:
+    src: config.js.j2
+    dest: /var/www/html/config.js
+    owner: caddy
+    group: caddy
+    mode: "u=rw,g=r,o=r"
+  become: true
+
+- name: Configure Caddy
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    owner: root
+    group: caddy
+    mode: "u=rw,g=r,o=r"
+  become: true
+  notify: restart caddy
