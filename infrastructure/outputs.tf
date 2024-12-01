@@ -1,16 +1,11 @@
-output "web_public_ip" {
-  description = "Public IP of the web server"
-  value       = module.instances.web_public_ip
+output "instance_private_ips" {
+  description = "Private IPs of all instances"
+  value       = module.instances.instances_private_ips
 }
 
-output "web_private_ip" {
-  description = "Private IP of the web server"
-  value       = module.instances.web_private_ip
-}
-
-output "backend_private_ip" {
-  description = "Private IP of the backend server"
-  value       = module.instances.backend_private_ip
+output "instance_public_ips" {
+  description = "Public IPs of all instances"
+  value       = module.instances.instances_public_ips
 }
 
 output "vpc_id" {

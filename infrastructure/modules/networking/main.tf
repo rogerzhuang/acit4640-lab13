@@ -80,6 +80,7 @@ resource "aws_security_group" "public" {
   description = "Public security group"
   vpc_id      = aws_vpc.main.id
 
+  # Allow HTTP from internet
   ingress {
     from_port   = 80
     to_port     = 80
@@ -87,6 +88,7 @@ resource "aws_security_group" "public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow SSH from internet
   ingress {
     from_port   = 22
     to_port     = 22
@@ -94,18 +96,28 @@ resource "aws_security_group" "public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow all traffic from VPC
   ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "all"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = [var.vpc_cidr]
   }
 
+  # Allow all traffic to internet
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow all traffic to VPC
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr]
   }
 
   tags = {
@@ -118,6 +130,7 @@ resource "aws_security_group" "private" {
   description = "Private security group"
   vpc_id      = aws_vpc.main.id
 
+  # Allow SSH from internet
   ingress {
     from_port   = 22
     to_port     = 22
@@ -125,18 +138,28 @@ resource "aws_security_group" "private" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow all traffic from VPC
   ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "all"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = [var.vpc_cidr]
   }
 
+  # Allow all traffic to internet
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow all traffic to VPC
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr]
   }
 
   tags = {

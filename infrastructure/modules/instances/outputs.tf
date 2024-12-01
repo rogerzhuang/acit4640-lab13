@@ -1,34 +1,14 @@
-output "web_instance_id" {
-  description = "ID of the web server instance"
-  value       = aws_instance.web.id
+output "instance_map" {
+  description = "Map of all instances"
+  value       = aws_instance.instances
 }
 
-output "backend_instance_id" {
-  description = "ID of the backend server instance"
-  value       = aws_instance.backend.id
+output "instances_private_ips" {
+  description = "Private IPs of all instances"
+  value       = { for k, v in aws_instance.instances : k => v.private_ip }
 }
 
-output "web_public_ip" {
-  description = "Public IP of the web server"
-  value       = aws_instance.web.public_ip
-}
-
-output "web_private_ip" {
-  description = "Private IP of the web server"
-  value       = aws_instance.web.private_ip
-}
-
-output "backend_private_ip" {
-  description = "Private IP of the backend server"
-  value       = aws_instance.backend.private_ip
-}
-
-output "web_instance" {
-  description = "Web server instance object"
-  value       = aws_instance.web
-}
-
-output "backend_instance" {
-  description = "Backend server instance object"
-  value       = aws_instance.backend
+output "instances_public_ips" {
+  description = "Public IPs of all instances"
+  value       = { for k, v in aws_instance.instances : k => v.public_ip }
 }

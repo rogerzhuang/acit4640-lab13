@@ -8,24 +8,30 @@ variable "project_name" {
   type        = string
 }
 
-variable "public_subnet_id" {
-  description = "ID of the public subnet"
-  type        = string
+variable "instances" {
+  description = "List of instances to create"
+  type = list(object({
+    name       = string
+    role       = string
+    subnet_key = string
+    sg_key     = string
+  }))
 }
 
-variable "private_subnet_id" {
-  description = "ID of the private subnet"
-  type        = string
+variable "subnets" {
+  description = "Map of subnet IDs"
+  type = object({
+    public  = string
+    private = string
+  })
 }
 
-variable "public_sg_id" {
-  description = "ID of the public security group"
-  type        = string
-}
-
-variable "private_sg_id" {
-  description = "ID of the private security group"
-  type        = string
+variable "security_groups" {
+  description = "Map of security group IDs"
+  type = object({
+    public  = string
+    private = string
+  })
 }
 
 variable "zone_id" {

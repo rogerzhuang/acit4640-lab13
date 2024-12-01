@@ -1,9 +1,14 @@
 ---
 - name: Install required packages for caddy
   ansible.builtin.apt:
-    name: debian-keyring debian-archive-keyring apt-transport-https curl
+    name: "{{ item }}"
     state: present
     update_cache: true
+  loop:
+    - debian-keyring
+    - debian-archive-keyring
+    - apt-transport-https
+    - curl
   become: true
 
 - name: Add Caddy GPG key

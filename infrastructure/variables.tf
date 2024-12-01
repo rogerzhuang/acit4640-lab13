@@ -33,3 +33,27 @@ variable "ami_id" {
   type        = string
   default     = "ami-03839f1dba75bb628"  # Ubuntu 22.04 LTS
 }
+
+variable "instances" {
+  description = "List of instances to create"
+  type = list(object({
+    name       = string
+    role       = string
+    subnet_key = string
+    sg_key     = string
+  }))
+  default = [
+    {
+      name       = "w01"
+      role       = "web"
+      subnet_key = "public"
+      sg_key     = "public"
+    },
+    {
+      name       = "b01"
+      role       = "backend"
+      subnet_key = "private"
+      sg_key     = "private"
+    }
+  ]
+}

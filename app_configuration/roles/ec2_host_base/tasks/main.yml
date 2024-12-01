@@ -1,4 +1,11 @@
 ---
+- name: Update apt sources for EOL release
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list
+    regexp: 'http://[^/]*/ubuntu'
+    replace: 'http://old-releases.ubuntu.com/ubuntu'
+  become: true
+
 - name: install debugging tools and core packages
   ansible.builtin.package:
     update_cache: true
